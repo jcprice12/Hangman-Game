@@ -1,9 +1,10 @@
-var words = ["luke", "leia", "chewbacca", "anakin"];
+var words = [/*"luke", "leia", "chewbacca", "anakin", */"darth vader"];
 var myWordsLength = words.length;
 var whiteSpace = "&nbsp";
 var playing = false;
 var wordDict = [];
 var correctCounter = 0;
+var whiteSpaceRegex = /\s/;
 
 function decide(event){
 	if(playing){
@@ -27,6 +28,17 @@ function createCharObj(key, value){
 function getWord(){
 	var word = words[Math.floor(Math.random() * words.length)];
 	return word;
+}
+
+function createEmptySpace(){
+	var myChar = document.createElement("div");
+	myChar.className = "myChar";
+	myChar.innerHTML = whiteSpace;
+
+	var myCharContainer = document.createElement("span");
+	myCharContainer.className="charContainer";
+	myCharContainer.appendChild(myChar);
+	return myCharContainer;
 }
 
 function createChar(myCharVal){
@@ -75,12 +87,18 @@ function findChars(myChar){
 
 function instantiateWord(myWord){
 	for(i = 0; i < myWord.length; i++){
-		var myCharElement = createChar(whiteSpace);
-		var myElement = createCharContainer(myCharElement);
-		var myCharObj = createCharObj(myWord.charAt(i), myCharElement);
-		wordDict.push(myCharObj);
-		console.log(myCharObj);
-		document.getElementById("wordContainer").appendChild(myElement);
+		if(myWord.charAt(i).search(whiteSpaceRegex) == -1){
+			var myCharElement = createChar(whiteSpace);
+			var myElement = createCharContainer(myCharElement);
+			var myCharObj = createCharObj(myWord.charAt(i), myCharElement);
+			wordDict.push(myCharObj);
+			console.log(myCharObj);
+			document.getElementById("wordContainer").appendChild(myElement);
+		} else {
+			console.log("empty space");
+			var emptySpace = createEmptySpace();
+			document.getElementById("wordContainer").appendChild(emptySpace);
+		}
 	}
 }
 

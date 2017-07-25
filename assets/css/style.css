@@ -6,8 +6,22 @@ body{
 
 h1{
 	font-size: 80px;
+	/*color:#444349;*/
+	margin-left: 50px;
 }
 
+.titleContainer{
+	/*background-color: #ffd700;*/
+	display:table;
+	height:200px;
+	width:100%;
+}
+
+.headerWrapper{
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle;
+}
 
 #wordContainer{
 	font-size:40px;
@@ -22,4 +36,9 @@ h1{
 .charContainer{
 	float:left;
 	margin-left: 5px;
+	margin-bottom: 5px;
+}
+
+.mainContent{
+	margin:50px;
 }
