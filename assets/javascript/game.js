@@ -3,6 +3,7 @@ var myWordsLength = words.length;
 var whiteSpace = "&nbsp";
 var playing = false;
 var wordDict = [];
+var correctCounter = 0;
 
 function decide(event){
 	if(playing){
@@ -11,7 +12,7 @@ function decide(event){
     findChars(chosenChar);
 	} else {
 		playing = true;
-		console.log("hey");
+		deleteWord();
 		instantiateWord(getWord());
 	}
 }
@@ -46,14 +47,28 @@ function createCharContainer(myCharElement){
 	myCharContainer.className="charContainer";
 	myCharContainer.appendChild(myCharElement);
 	myCharContainer.appendChild(createUnderline());
-	console.log(myCharContainer);
 	return myCharContainer;
+}
+
+function deleteWord(){
+	wordDict = [];
+	wordContainer = document.getElementById("wordContainer");
+	wordContainer.innerHTML = "";
+}
+
+function executeWinState(){
+	correctCounter = 0;
+	playing = false;
 }
 
 function findChars(myChar){
 	for(i = 0; i < wordDict.length; i++){
-		if(myChar === wordDict[i].key){
+		if((myChar === wordDict[i].key) && (myChar != wordDict[i].value.innerHTML)){
 			wordDict[i].value.innerHTML = myChar;
+			correctCounter++;
+			if(correctCounter == wordDict.length){
+				executeWinState();
+			}
 		}
 	}
 }
