@@ -1,0 +1,25 @@
+body{
+	background-image: url("../images/stardust.png");
+	color:#ffd700;
+	font-family: 'Press Start 2P', cursive;
+}
+
+h1{
+	font-size: 80px;
+}
+
+
+#wordContainer{
+	font-size:40px;
+}
+
+.myUnderline{
+	height:5px;
+	width:40px;
+	background-color: #ffd700;
+}
+
+.charContainer{
+	float:left;
+	margin-left: 5px;
+}
