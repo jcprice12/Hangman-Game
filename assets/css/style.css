@@ -4,10 +4,24 @@ body{
 	font-family: 'Press Start 2P', cursive;
 }
 
+h1, h2, h3, h4, h5, h6{
+	line-height: 1.5;
+}
+
 h1{
 	font-size: 80px;
 	/*color:#444349;*/
-	margin-left: 50px;
+	text-align: center;
+}
+
+h2 {
+	font-size: 30px;
+}
+
+.clearFix:after{
+  	content: "";
+  	display: table;
+  	clear: both;
 }
 
 .titleContainer{
@@ -27,6 +41,14 @@ h1{
 	font-size:40px;
 }
 
+#usedCharsContainer{
+	font-size:20px;
+	margin-top: 40px;
+	max-width: 100%;
+	min-width: 100px;
+	line-height: 1.5;
+}
+
 .myUnderline{
 	height:5px;
 	width:40px;
@@ -35,10 +57,28 @@ h1{
 
 .charContainer{
 	float:left;
-	margin-left: 5px;
+	margin-left: 10px;
 	margin-bottom: 5px;
 }
 
 .mainContent{
 	margin:50px;
+}
+
+.guessesContainer{
+	
+}
+
+.half{
+	width:45%;
+	height:100%;
+	margin-top: 50px;
+}
+
+.left{
+	float:left;
+}
+
+.right{
+	float:right;
 }

@@ -1,5 +1,5 @@
-var words = [/*"luke", "leia", "chewbacca", "anakin", */"darth vader"];
-var myWordsLength = words.length;
+var words = ["luke", "leia", "chewbacca", "anakin", "darth vader"];
+var usedCharacters = [];
 var whiteSpace = "&nbsp";
 var playing = false;
 var wordDict = [];
@@ -8,14 +8,31 @@ var whiteSpaceRegex = /\s/;
 
 function decide(event){
 	if(playing){
-		var x = event.which || event.keyCode;
-    var chosenChar = String.fromCharCode(x);
-    findChars(chosenChar);
+		//var x = event.which || event.keyCode;
+    //var chosenChar = String.fromCharCode(x);
+    findChars(event.key);
 	} else {
 		playing = true;
 		deleteWord();
 		instantiateWord(getWord());
 	}
+}
+
+function printUsedCharacters(){
+	console.log("printing");
+	var myContainer = document.getElementById("usedCharsContainer");
+	console.log(myContainer);
+	var myStringOfChars = "";
+	for(i = 0; i < usedCharacters.length; i++){
+		myStringOfChars = myStringOfChars + usedCharacters[i];
+		if(i === (usedCharacters.length - 1)){
+			break;
+		}
+		myStringOfChars = myStringOfChars + ", ";
+	}
+	console.log(myStringOfChars);
+	myContainer.innerHTML = myStringOfChars;
+	console.log(myContainer);
 }
 
 function createCharObj(key, value){
@@ -74,13 +91,26 @@ function executeWinState(){
 }
 
 function findChars(myChar){
+	var charIsPresent = false;
 	for(i = 0; i < wordDict.length; i++){
 		if((myChar === wordDict[i].key) && (myChar != wordDict[i].value.innerHTML)){
 			wordDict[i].value.innerHTML = myChar;
 			correctCounter++;
+			charIsPresent = true;
 			if(correctCounter == wordDict.length){
 				executeWinState();
 			}
+		}
+	}
+
+	console.log("char chosen is: " + myChar);
+	console.log(charIsPresent);
+	if(!charIsPresent){
+		var upperChar = myChar.toUpperCase();
+		if(usedCharacters.indexOf(upperChar) === -1){
+			usedCharacters.push(upperChar);
+			console.log(usedCharacters);
+			printUsedCharacters();
 		}
 	}
 }
@@ -92,7 +122,6 @@ function instantiateWord(myWord){
 			var myElement = createCharContainer(myCharElement);
 			var myCharObj = createCharObj(myWord.charAt(i), myCharElement);
 			wordDict.push(myCharObj);
-			console.log(myCharObj);
 			document.getElementById("wordContainer").appendChild(myElement);
 		} else {
 			console.log("empty space");
