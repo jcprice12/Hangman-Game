@@ -15,7 +15,12 @@
 			</h1>
 		</div>
 	</div>
-	<div class="mainContent">
+	<div id="startDivContainer">
+		<div id="startDiv">
+			PRESS ANY KEY TO START
+		</div>
+	</div>
+	<div class="mainContent gametime">
 			<div id="wordContainer" class="clearFix">
 				<!-- <span class="charContainer">
 						<div class="myChar">
@@ -51,12 +56,18 @@
 				</span> -->
 			</div>
 		<section class="half left">
-			<div class="guessesContainer">
+			<div class="guessesContainer clearFix">
 				<h2>
 					INCORRECT GUESSES
 				</h2>
 				<div id="usedCharsContainer">
-					
+					<!-- populated by javascript -->
+				</div>
+				<h2 id="guessesRemainingHeader">
+					GUESSES REMAINING
+				</h2>
+				<div id="guessesRemainingContainer">
+					<!-- populated by javascript -->
 				</div>
 			</div>
 		</section>

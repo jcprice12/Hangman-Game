@@ -5,23 +5,38 @@ var playing = false;
 var wordDict = [];
 var correctCounter = 0;
 var whiteSpaceRegex = /\s/;
+var numberOfGuesses = 10;
+var numberOfGuessesRemaining = numberOfGuesses;
 
 function decide(event){
 	if(playing){
+		//deprecated?
 		//var x = event.which || event.keyCode;
     //var chosenChar = String.fromCharCode(x);
     findChars(event.key);
 	} else {
+		showGameTime();
 		playing = true;
 		deleteWord();
-		instantiateWord(getWord());
+		startOver(getWord());
 	}
 }
 
+function printFailureMessage(){
+
+}
+
+function printVictoryMessage(){
+
+}
+
+function printRemainingGuesses(){
+	var myContainer = document.getElementById("guessesRemainingContainer");
+	myContainer.innerHTML = numberOfGuessesRemaining;
+}
+
 function printUsedCharacters(){
-	console.log("printing");
 	var myContainer = document.getElementById("usedCharsContainer");
-	console.log(myContainer);
 	var myStringOfChars = "";
 	for(i = 0; i < usedCharacters.length; i++){
 		myStringOfChars = myStringOfChars + usedCharacters[i];
@@ -30,14 +45,12 @@ function printUsedCharacters(){
 		}
 		myStringOfChars = myStringOfChars + ", ";
 	}
-	console.log(myStringOfChars);
 	myContainer.innerHTML = myStringOfChars;
-	console.log(myContainer);
 }
 
 function createCharObj(key, value){
 	var coolChar = new Object();
-	coolChar.key = key;
+	coolChar.key = key.toLowerCase();
 	coolChar.value = value;
 	return coolChar;
 }
@@ -85,37 +98,89 @@ function deleteWord(){
 	wordContainer.innerHTML = "";
 }
 
-function executeWinState(){
+function roundOver(){
 	correctCounter = 0;
+	numberOfGuessesRemaining = numberOfGuesses;
+	usedCharacters = [];
 	playing = false;
+}
+
+function executeLoseState(){
+	console.log("you lost");
+	printFailureMessage();
+}
+
+function executeWinState(){
+	console.log("you won");
+	printVictoryMessage();
+}
+
+function executeWrongGuess(upperChar){
+	if(usedCharacters.indexOf(upperChar) === -1){
+		numberOfGuessesRemaining--;
+		printRemainingGuesses();
+		usedCharacters.push(upperChar);
+		printUsedCharacters();
+		if(numberOfGuessesRemaining <= 0){//hopefully it's never less than 0, but this will catch it if it does happen
+			roundOver();
+			executeLoseState();
+		}
+	}
 }
 
 function findChars(myChar){
 	var charIsPresent = false;
+	var myChar = myChar.toUpperCase();
 	for(i = 0; i < wordDict.length; i++){
-		if((myChar === wordDict[i].key) && (myChar != wordDict[i].value.innerHTML)){
-			wordDict[i].value.innerHTML = myChar;
-			correctCounter++;
+		if(myChar === wordDict[i].key.toUpperCase()){
 			charIsPresent = true;
-			if(correctCounter == wordDict.length){
-				executeWinState();
+			if(myChar != wordDict[i].value.innerHTML.toUpperCase()){
+				wordDict[i].value.innerHTML = myChar;
+				correctCounter++;
+				if(correctCounter == wordDict.length){
+					roundOver();
+					executeWinState();
+				}
 			}
 		}
 	}
 
-	console.log("char chosen is: " + myChar);
-	console.log(charIsPresent);
 	if(!charIsPresent){
-		var upperChar = myChar.toUpperCase();
-		if(usedCharacters.indexOf(upperChar) === -1){
-			usedCharacters.push(upperChar);
-			console.log(usedCharacters);
-			printUsedCharacters();
-		}
+		executeWrongGuess(myChar);
 	}
 }
 
+function showGameTime(){
+	var startDivContainer = document.getElementById("startDivContainer");
+	startDivContainer.style.display = "none";
+	var gameTimeElements = document.getElementsByClassName("gametime");
+	for(i = 0; i < gameTimeElements.length; i++){
+		gameTimeElements[i].style.display = "block";
+	}
+}
+
+function pauseTimer(){
+
+}
+
+function resetTimer(){
+
+}
+
+function startTimer(){
+
+}
+
+function houseCleaning(){
+	console.log("house cleaning");
+	printRemainingGuesses();
+	printUsedCharacters();
+	resetTimer();
+	startTimer();
+}
+
 function instantiateWord(myWord){
+	printRemainingGuesses(numberOfGuesses);
 	for(i = 0; i < myWord.length; i++){
 		if(myWord.charAt(i).search(whiteSpaceRegex) == -1){
 			var myCharElement = createChar(whiteSpace);
@@ -129,6 +194,11 @@ function instantiateWord(myWord){
 			document.getElementById("wordContainer").appendChild(emptySpace);
 		}
 	}
+}
+
+function startOver(myWord){
+	instantiateWord(myWord);
+	houseCleaning();
 }
 
 document.addEventListener("keypress", decide);
