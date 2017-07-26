@@ -1,12 +1,13 @@
+var NUMBER_OF_GUESSES = 10;
+var WHITE_SPACE_REGEX = /\s/;
+
 var words = ["luke", "leia", "chewbacca", "anakin", "darth vader"];
 var usedCharacters = [];
 var whiteSpace = "&nbsp";
 var playing = false;
 var wordDict = [];
 var correctCounter = 0;
-var whiteSpaceRegex = /\s/;
-var numberOfGuesses = 10;
-var numberOfGuessesRemaining = numberOfGuesses;
+var numberOfGuessesRemaining = NUMBER_OF_GUESSES;
 var timerTimer;
 var timerDiv = document.getElementById("timer");
 var timerWrapper = document.getElementById("timerWrapper");
@@ -30,12 +31,18 @@ function decide(event){
 	}
 }
 
-function printFailureMessage(){
-
+function printMessage(message){
+	document.getElementById("messageContainer").innerHTML = message;
 }
 
 function printVictoryMessage(){
+	var myMessage = "You won! Press a key to play again.";
+	printMessage(myMessage);
+}
 
+function printFailureMessage(){
+	var myMessage = "Darth Vader has vanquished you. Press a key to play again";
+	printMessage(myMessage);
 }
 
 function printRemainingGuesses(){
@@ -72,7 +79,6 @@ function createEmptySpace(){
 	var myChar = document.createElement("div");
 	myChar.className = "myChar";
 	myChar.innerHTML = whiteSpace;
-
 	var myCharContainer = document.createElement("span");
 	myCharContainer.className="charContainer";
 	myCharContainer.appendChild(myChar);
@@ -111,18 +117,16 @@ function roundOver(){
 	stopTimer();
 	currentRateOfChange = rateOfChange;
 	correctCounter = 0;
-	numberOfGuessesRemaining = numberOfGuesses;
+	numberOfGuessesRemaining = NUMBER_OF_GUESSES;
 	usedCharacters = [];
 	playing = false;
 }
 
 function executeLoseState(){
-	console.log("you lost");
 	printFailureMessage();
 }
 
 function executeWinState(){
-	console.log("you won");
 	printVictoryMessage();
 }
 
@@ -203,11 +207,12 @@ function startTimer(){
 }
 
 function houseCleaning(){
-	//$("#myImage").stop(true,false);
+	console.log("house cleaning");
 	$( "#myImage" ).fadeTo( "fast" , 0, function() {
     // Animation complete.
   });
-	console.log("house cleaning");
+  printRemainingGuesses(NUMBER_OF_GUESSES);
+	printMessage("Press a key to guess a letter.");
 	printRemainingGuesses();
 	printUsedCharacters();
 	resetTimer();
@@ -215,16 +220,14 @@ function houseCleaning(){
 }
 
 function instantiateWord(myWord){
-	printRemainingGuesses(numberOfGuesses);
 	for(i = 0; i < myWord.length; i++){
-		if(myWord.charAt(i).search(whiteSpaceRegex) == -1){
+		if(myWord.charAt(i).search(WHITE_SPACE_REGEX) == -1){
 			var myCharElement = createChar(whiteSpace);
 			var myElement = createCharContainer(myCharElement);
 			var myCharObj = createCharObj(myWord.charAt(i), myCharElement);
 			wordDict.push(myCharObj);
 			document.getElementById("wordContainer").appendChild(myElement);
 		} else {
-			console.log("empty space");
 			var emptySpace = createEmptySpace();
 			document.getElementById("wordContainer").appendChild(emptySpace);
 		}

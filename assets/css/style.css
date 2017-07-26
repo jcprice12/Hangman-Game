@@ -1,6 +1,7 @@
 body{
 	background-image: url("../images/stardust.png");
 	color:#ffd700;
+	font-size: 30px;
 	font-family: 'Press Start 2P', cursive;
 }
 
@@ -38,11 +39,11 @@ h2 {
 }
 
 #wordContainer{
+	margin-top: 40px;
 	font-size:50px;
 }
 
 #usedCharsContainer{
-	font-size:30px;
 	margin-top: 40px;
 	max-width: 100%;
 	min-width: 100px;
@@ -62,11 +63,7 @@ h2 {
 }
 
 .mainContent{
-	margin:50px;
-}
-
-.guessesContainer{
-	
+	margin:40px;
 }
 
 .half{
@@ -84,7 +81,6 @@ h2 {
 }
 
 #guessesRemainingContainer{
-	font-size: 30px;
 	margin-top: 40px;
 	max-width: 100%;
 	min-width: 100px;
@@ -92,7 +88,7 @@ h2 {
 }
 
 #guessesRemainingHeader{
-	margin-top: 50px;
+	margin-top: 40px;
 }
 
 .gametime{
