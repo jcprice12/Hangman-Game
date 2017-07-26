@@ -1,7 +1,9 @@
 var NUMBER_OF_GUESSES = 10;
-var WHITE_SPACE_REGEX = /\s/;
+var SPACE_REGEX = /\s|-/;
+var GOOD_CHAR_REGEX = /^[A-Z0-9]$/;
+var WHITESPACE = "&nbsp";
 
-var words = ["luke", "leia", "chewbacca", "anakin", "darth vader"];
+var words = ["luke skywalker", "leia organa", "chewbacca", "anakin skywalker", "darth vader", "han solo", "C-3PO", "obi-wan kenobi", "R2-D2"];
 var usedCharacters = [];
 var whiteSpace = "&nbsp";
 var playing = false;
@@ -18,11 +20,10 @@ var myPercentage = 100;
 
 function decide(event){
 	if(playing){
-		//deprecated?
-		//var x = event.which || event.keyCode;
-    //var chosenChar = String.fromCharCode(x);
-    //$("#myImage").stop(false,true);
-    findChars(event.key);
+    var char = event.key.toUpperCase();
+    if(char.search(GOOD_CHAR_REGEX) !== -1){
+    	findChars(char);
+    }
 	} else {
 		showGameTime();
 		playing = true;
@@ -41,7 +42,7 @@ function printVictoryMessage(){
 }
 
 function printFailureMessage(){
-	var myMessage = "Darth Vader has vanquished you. Press a key to play again";
+	var myMessage = "Darth Vader has vanquished you. Press a key to play again.";
 	printMessage(myMessage);
 }
 
@@ -65,7 +66,7 @@ function printUsedCharacters(){
 
 function createCharObj(key, value){
 	var coolChar = new Object();
-	coolChar.key = key.toLowerCase();
+	coolChar.key = key.toUpperCase();
 	coolChar.value = value;
 	return coolChar;
 }
@@ -75,10 +76,10 @@ function getWord(){
 	return word;
 }
 
-function createEmptySpace(){
+function createEmptySpace(spaceChar){
 	var myChar = document.createElement("div");
 	myChar.className = "myChar";
-	myChar.innerHTML = whiteSpace;
+	myChar.innerHTML = spaceChar;
 	var myCharContainer = document.createElement("span");
 	myCharContainer.className="charContainer";
 	myCharContainer.appendChild(myChar);
@@ -146,9 +147,8 @@ function executeWrongGuess(upperChar){
 
 function findChars(myChar){
 	var charIsPresent = false;
-	var myChar = myChar.toUpperCase();
 	for(i = 0; i < wordDict.length; i++){
-		if(myChar === wordDict[i].key.toUpperCase()){
+		if(myChar === wordDict[i].key){
 			charIsPresent = true;
 			if(myChar != wordDict[i].value.innerHTML.toUpperCase()){
 				wordDict[i].value.innerHTML = myChar;
@@ -209,7 +209,7 @@ function startTimer(){
 function houseCleaning(){
 	console.log("house cleaning");
 	$( "#myImage" ).fadeTo( "fast" , 0, function() {
-    // Animation complete.
+    // Code to be executed only after animation is completed
   });
   printRemainingGuesses(NUMBER_OF_GUESSES);
 	printMessage("Press a key to guess a letter.");
@@ -221,14 +221,20 @@ function houseCleaning(){
 
 function instantiateWord(myWord){
 	for(i = 0; i < myWord.length; i++){
-		if(myWord.charAt(i).search(WHITE_SPACE_REGEX) == -1){
-			var myCharElement = createChar(whiteSpace);
+		var myChar = myWord.charAt(i);
+		if(myChar.search(SPACE_REGEX) == -1){
+			var myCharElement = createChar(WHITESPACE);
 			var myElement = createCharContainer(myCharElement);
-			var myCharObj = createCharObj(myWord.charAt(i), myCharElement);
+			var myCharObj = createCharObj(myChar, myCharElement);
 			wordDict.push(myCharObj);
 			document.getElementById("wordContainer").appendChild(myElement);
 		} else {
-			var emptySpace = createEmptySpace();
+			var emptySpace;
+			if(myChar === "-"){
+				emptySpace = createEmptySpace(myChar);
+			} else {
+				emptySpace = createEmptySpace(WHITESPACE);
+			}
 			document.getElementById("wordContainer").appendChild(emptySpace);
 		}
 	}
