@@ -7,12 +7,20 @@ var correctCounter = 0;
 var whiteSpaceRegex = /\s/;
 var numberOfGuesses = 10;
 var numberOfGuessesRemaining = numberOfGuesses;
+var timerTimer;
+var timerDiv = document.getElementById("timer");
+var timerWrapper = document.getElementById("timerWrapper");
+var rateOfChange = 0.05;
+var currentRateOfChange = rateOfChange;
+var penalty = 0.005;
+var myPercentage = 100;
 
 function decide(event){
 	if(playing){
 		//deprecated?
 		//var x = event.which || event.keyCode;
     //var chosenChar = String.fromCharCode(x);
+    //$("#myImage").stop(false,true);
     findChars(event.key);
 	} else {
 		showGameTime();
@@ -99,6 +107,9 @@ function deleteWord(){
 }
 
 function roundOver(){
+	myPercentage = 100;
+	stopTimer();
+	currentRateOfChange = rateOfChange;
 	correctCounter = 0;
 	numberOfGuessesRemaining = numberOfGuesses;
 	usedCharacters = [];
@@ -118,6 +129,7 @@ function executeWinState(){
 function executeWrongGuess(upperChar){
 	if(usedCharacters.indexOf(upperChar) === -1){
 		numberOfGuessesRemaining--;
+		currentRateOfChange = currentRateOfChange + penalty;
 		printRemainingGuesses();
 		usedCharacters.push(upperChar);
 		printUsedCharacters();
@@ -159,19 +171,42 @@ function showGameTime(){
 	}
 }
 
-function pauseTimer(){
-
+function stopTimer(){
+	clearTimeout(timerTimer);
 }
 
 function resetTimer(){
+	$(timerDiv).css({'width': '100%'});
+}
 
+function tick(){
+	if(myPercentage !== 0){
+		myPercentage = myPercentage - currentRateOfChange;
+		if(myPercentage <= 0){
+			myPercentage = 0;
+		}
+		var opacityPercentage = (((myPercentage - 100) * -1) / 100)/3;
+		document.getElementById("myImage").style.opacity = opacityPercentage;
+		var localPercent = myPercentage + '%';
+		$(timerDiv).css({'width': localPercent});
+		timerTimer = setTimeout(function(){ 
+			tick();
+		}, 10);
+	} else {
+		roundOver();
+		executeLoseState();
+	}
 }
 
 function startTimer(){
-
+	tick();
 }
 
 function houseCleaning(){
+	//$("#myImage").stop(true,false);
+	$( "#myImage" ).fadeTo( "fast" , 0, function() {
+    // Animation complete.
+  });
 	console.log("house cleaning");
 	printRemainingGuesses();
 	printUsedCharacters();

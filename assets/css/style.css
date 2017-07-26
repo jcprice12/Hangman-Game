@@ -117,3 +117,29 @@ h2 {
 	vertical-align: middle;
 	text-align: center;
 }
+
+#myImage{
+	position:absolute;
+	z-index: -1;
+	height:100%;
+	right:0;
+	margin:auto;
+	opacity: 0;
+}
+
+#timer{
+	width:100%;
+	height:100%;
+	background-color: #ffd700;
+	float:right;
+}
+
+#timerWrapper{
+	width:100%;
+	height:25px;
+	border: 2px solid #ffd700; 
+}
+
+#timeContainer{
+	text-align: center;
+}
